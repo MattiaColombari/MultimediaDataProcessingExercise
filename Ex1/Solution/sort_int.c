@@ -28,9 +28,8 @@ void sort(int* list, size_t len){
 }
 
 int main( int argc, char *argv[] )  {
-    printf("%d\n", argc);
     if (argc != 3) {
-        printf("Error, number of arguments");
+        printf("Error, number of arguments\n");
         return 1;
     }
 
@@ -39,6 +38,7 @@ int main( int argc, char *argv[] )  {
     char buffer;
     int current_number;
     bool is_first = true;
+    bool is_neg = false;
     int *list_of_element;
     list_of_element = malloc(1);
     size_t list_len = 0;
@@ -47,33 +47,36 @@ int main( int argc, char *argv[] )  {
     f_out = fopen(argv[2], "w");
 
     if ((f_in == NULL) || (f_out == NULL)){
-        printf("Errore apertura file.");
+        printf("Errore apertura file.\n");
         return 1;
     }
 
-    printf("Debug - inizio lettura\n");
+    printf("Inizio lettura.\n");
 
-    while (fread(&buffer, sizeof(char), 1, f_in) > 0){
+    buffer = fgetc(f_in);
+    while ( !feof(f_in) ){
         if (isnumber(buffer)){
             current_number *= 10;
             current_number +=  atoi(&buffer);
             is_first = false;
         }
         else if (buffer == '-'){
-            current_number *= -1;
+            is_neg = true;
             is_first = false;
         }
         else{
             if (!is_first){
-                printf("Debug - number: %d\n", current_number);
-                printf("Debug - index: %d\n", (int)list_len);
+                if (is_neg){
+                    current_number *= -1;
+                }
                 list_of_element = realloc(list_of_element, sizeof(int) * (list_len + 1));
                 list_of_element[list_len] = current_number;
-                list_len++;
-                printf("Debug - index: %d\n", (int)list_len);
+                list_len += 1;
             }
+
             current_number = 0;
-            if ((buffer != '\n') && (!isblank(buffer))){
+            if ((buffer != '\n') && (!isspace(buffer))){
+                printf("Identificato carattere estraneo: \'%c\'\n", buffer);
                 sort(list_of_element, list_len);
                 write_result(f_out, list_of_element, list_len);
                 fclose(f_in);
@@ -81,15 +84,30 @@ int main( int argc, char *argv[] )  {
                 free(list_of_element);
                 return 0;
             }
+            is_neg = false;
             is_first = true;
         }
+        buffer = fgetc(f_in);
+    }
+    if (!is_first){
+        if (is_neg){
+            current_number *= -1;
+        }
+        list_of_element = realloc(list_of_element, sizeof(int) * (list_len + 1));
+        list_of_element[list_len] = current_number;
+        list_len += 1;
     }
 
-    printf("Esco da qui 2\n");
+    printf("Lettura completata.\n");
+    printf("Identificati %d elementi.\n", (int) list_len);
 
     sort(list_of_element, list_len);
 
+    printf("Sorting completo.\n");
+
     write_result(f_out, list_of_element, list_len);
+
+    printf("Chiusura risorse.\n");
 
     fclose(f_in);
     fclose(f_out);
