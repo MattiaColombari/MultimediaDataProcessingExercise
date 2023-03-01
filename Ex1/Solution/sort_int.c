@@ -3,6 +3,12 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+void write_result(FILE* f, int* list_of_element, size_t list_len){
+    for (int i = 0; i < list_len; i++){
+        fprintf(f, "%d\n", list_of_element[i]);
+    }
+}
+
 void swap(int* xp, int* yp)
 {
     int temp = *xp;
@@ -47,13 +53,15 @@ int main( int argc, char *argv[] )  {
 
     printf("Debug - inizio lettura\n");
 
-    while (fread(&buffer, sizeof(char), 1, f_in) != 0){
+    while (fread(&buffer, sizeof(char), 1, f_in) > 0){
         if (isnumber(buffer)){
             current_number *= 10;
             current_number +=  atoi(&buffer);
+            is_first = false;
         }
         else if (buffer == '-'){
             current_number *= -1;
+            is_first = false;
         }
         else{
             if (!is_first){
@@ -66,19 +74,22 @@ int main( int argc, char *argv[] )  {
             }
             current_number = 0;
             if ((buffer != '\n') && (!isblank(buffer))){
-                break;
+                sort(list_of_element, list_len);
+                write_result(f_out, list_of_element, list_len);
+                fclose(f_in);
+                fclose(f_out);
+                free(list_of_element);
+                return 0;
             }
             is_first = true;
-            continue;
         }
-        is_first = false;
     }
+
+    printf("Esco da qui 2\n");
 
     sort(list_of_element, list_len);
 
-    for (int i = 0; i < list_len; i++){
-        fprintf(f_out, "%d\n", list_of_element[i]);
-    }
+    write_result(f_out, list_of_element, list_len);
 
     fclose(f_in);
     fclose(f_out);
