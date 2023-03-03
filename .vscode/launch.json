@@ -4,10 +4,7 @@
             "name": "C Launch",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}",
-            "args": [
-                "-file01.txt",
-                "fileOut1.txt"
-            ]
+            "args": []
         },
         {
             "name": "C/C++: gcc compilare ed eseguire il debug del file attivo",
@@ -21,6 +18,31 @@
             "externalConsole": false,
             "MIMode": "lldb",
             "preLaunchTask": "C/C++: gcc compila il file attivo"
+        },
+        {
+            "name": "C/C++: clang compilare ed eseguire il debug del file attivo",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "C/C++: clang compila il file attivo"
+        },
+        {
+            "name": "(lldb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "immettere il nome del programma, ad esempio ${workspaceFolder}/a.out",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
         }
     ],
     "version": "2.0.0"

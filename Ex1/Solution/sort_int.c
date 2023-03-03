@@ -3,6 +3,10 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+
 void write_result(FILE* f, int* list_of_element, size_t list_len){
     for (int i = 0; i < list_len; i++){
         fprintf(f, "%d\n", list_of_element[i]);
@@ -77,7 +81,8 @@ int main( int argc, char *argv[] )  {
             current_number = 0;
             if ((buffer != '\n') && (!isspace(buffer))){
                 printf("Identificato carattere estraneo: \'%c\'\n", buffer);
-                sort(list_of_element, list_len);
+                //sort(list_of_element, list_len);
+                qsort(list_of_element, list_len, sizeof(int), cmpfunc);
                 write_result(f_out, list_of_element, list_len);
                 fclose(f_in);
                 fclose(f_out);
@@ -101,7 +106,8 @@ int main( int argc, char *argv[] )  {
     printf("Lettura completata.\n");
     printf("Identificati %d elementi.\n", (int) list_len);
 
-    sort(list_of_element, list_len);
+    //sort(list_of_element, list_len);
+    qsort(list_of_element, list_len, sizeof(int), cmpfunc);
 
     printf("Sorting completo.\n");
 
