@@ -1,10 +1,31 @@
 {
     "configurations": [
+        
+        {
+            "name": "(lldb) Associa",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "immettere il nome del programma, ad esempio ${workspaceFolder}/a.out",
+            "MIMode": "lldb"
+        },
+        {
+            "name": "(lldb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "immettere il nome del programma, ad esempio ${workspaceFolder}/a.out",
+            "args": ["file02.txt", "file_out.txt"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        
         {
             "name": "C Launch",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}",
-            "args": []
+            "args": ["../file02.txt", "output_file.txt"]
         },
         {
             "name": "C/C++: gcc compilare ed eseguire il debug del file attivo",

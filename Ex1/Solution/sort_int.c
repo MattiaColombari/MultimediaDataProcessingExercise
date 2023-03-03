@@ -50,8 +50,12 @@ int main( int argc, char *argv[] )  {
     f_in = fopen(argv[1], "r");
     f_out = fopen(argv[2], "w");
 
-    if ((f_in == NULL) || (f_out == NULL)){
-        printf("Errore apertura file.\n");
+    if (f_in == NULL){
+        printf("Errore apertura file: \"%s\".\n", argv[1]);
+        return 1;
+    }
+    if (f_out == NULL){
+        printf("Errore apertura file: \"%s\".\n", argv[2]);
         return 1;
     }
 
