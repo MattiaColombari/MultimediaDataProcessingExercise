@@ -42,6 +42,52 @@ typedef struct vector {
         n_ = initial_size;
         capacity_ = initial_size;
     }
+    /*
+        Definiamo un nuovo cvostruttore che a partire da un0altro vettore ne crea una copia.
+        In CPP non passare mai un vettore senza il riferimento altrimenti avremmo una shallow copy,
+        Quindi usiamo un riferimento.
+        Quando se passi un oggetto senza il riferimento metti un commento dicendo che lo stai
+        facendo volontariemente.
+    */
+    vector(const vector& other){
+        n_ = other.n_;
+        capacity_ = other.capacity_;
+        nums_ = (int32_t*) malloc(capacity_ * sizeof(int32_t));
+        //Sarebbe più efficente usare 
+        for(size_t i = 0; i < n_; i++){
+            nums_[i] = other.nums_[i];
+        }
+    }
+    //Funzione per l'assegnamento, deepcopy.
+    vector& operator=(const vector &other){
+        /*
+            Bisogna controllare di non assegnare l'operatore a se stesso,
+            altrimenri abbimao un'errore, prima liberiamo la memoria e poi la leggeremmo.
+            Per quanto possa sembrare una cosa strana questo può succedere, quinid questo
+            è un controllo importante.
+            Quindi facciamo il seguente controllo, sull'inidirizzo dei due elementi:
+        */
+        if(this != &other){
+            // SE abbiamo già abbastanza spazioni non riallochiamo niente.
+            if(capacity_ < other.n_){
+                //Libero la memoria.
+
+                free(nums_);
+                capacity_ = other.capacity_;
+                nums_ = (int32_t*) malloc(capacity_ * sizeof(int32_t));
+            }
+
+            //Copio dati.
+
+            n_ = other.n_;
+            for(size_t i = 0; i < n_; i++){
+                nums_[i] = other.nums_[i];
+            }
+        }
+
+        // Questo per garantire che tutti gli assegnamenti vadino a buon fine.
+        return *this;
+    }
     //Struttura del Decostruttore.
     ~vector(){
         free(nums_);
@@ -69,10 +115,40 @@ typedef struct vector {
     int size() const {
         return this->n_;
     }
-    int32_t at(int i) {
+
+    int32_t at(int i) const {
         assert(i >= 0 && i < this->n_);
         return this->nums_[i];
     }
+
+    /*
+        int32_t& operator[](int i) {
+            return nums_[i];
+        }
+
+        Applichiamo l'overload degli operatori, in modo che possiamo accedere agli elementi di un
+        oggetto nel segunete modo:
+        v[i];
+
+        Da notare che però non possiamo scrivere:
+        v[2] = 5;
+        Questo perchè la funzione ritora un valore, non un indirizzo, quindo non possiamo modificarlo.
+        Quindi ritorniamo un riferimento, come mostrato nella funzione successiva.
+        Da notare che abbiamo tolto const poché nonostante il compilatore me lo faccia passare
+        in realtà andiamo a dare un riferimento che può essere modificato.
+
+        Scriviamo due volte la funzione perché volgliamo in alcuni casi riscrivere l'oggetto in
+        altri casi no, questo è una pratica molto frequente.
+        Le due funzioni si distinguono dai parametri, in un caso abbiamo un int nell'altro un const int.
+    */
+   int32_t& operator[](int i) {
+        return nums_[i];
+    }
+    const int32_t& operator[](int i) const{
+        return nums_[i];
+    }
+
+    
 };
 
 //Nuova funzione fatta per dimostrazione.
@@ -87,6 +163,12 @@ void raddoppia_sol_C(int* val){
 void raddoppia_sol_CPP(int &val){
     //Con '&' andiamo a speficiare che stiamo usando un riferimento alla varibile passata.
     val = val * 2;
+}
+
+void scrivi_vettore(FILE *f, const vector& v){
+    for (int i = 0; i < v.size(); i++) {
+        fprintf(f, "%" PRId32 "\n", v[i]);
+    }
 }
 
 int main(int argc, char *argv[]) 
@@ -165,11 +247,30 @@ int main(int argc, char *argv[])
         }
     }
 
+    /*
+        Dato che abbiamo implementato il costruttore che prende un'altro vettore come input,
+        allora abbiamo una deep copy.
+        Questa è un'operazione di Inizializzazione.
+    */
+    vector h = v;
+
+    /*
+        Questa è un'oprazione di assegnamento.
+        E senza il metodo prediscposto è una shallow copy.
+    */
+    vector v_deepcopy;
+    v_deepcopy = v;     // Questo è un'expression statement.
+
+    int a, b, c, d;
+    a = b = c = d = 5;  // Questo assegnamento è lecito in CPP, come in C.
+    (a = b) = 8; //Dopo questo "b" rimarrebbe inviato e "a" sarebbe 8, la valutazione dell'espressione ritorna "a", come variabile propio.
+
+    // Se non ritornassimo niente come ritorno della funzione di assegnamento questo non funzionerebbe.
+    h = v_deepcopy = v;
+
     v.sort();
 
-    for (int i = 0; i < v.size(); i++) {
-        fprintf(fout, "%" PRId32 "\n", v.at(i));
-    }
+    scrivi_vettore(fout, v);
 
     //Non serve neanche invocare il decostruttore.
     fclose(fin);

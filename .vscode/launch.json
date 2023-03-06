@@ -1,6 +1,7 @@
 {
     "configurations": [
         
+        
         {
             "name": "(lldb) Associa",
             "type": "cppdbg",
@@ -32,7 +33,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": [],
+            "args": ["../file02.txt", "output_file.txt"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
