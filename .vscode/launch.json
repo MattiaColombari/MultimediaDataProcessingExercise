@@ -1,7 +1,5 @@
 {
     "configurations": [
-        
-        
         {
             "name": "(lldb) Associa",
             "type": "cppdbg",
@@ -14,26 +12,36 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "immettere il nome del programma, ad esempio ${workspaceFolder}/a.out",
-            "args": ["file02.txt", "file_out.txt"],
+            "args": [
+                "file02.txt",
+                "file_out.txt"
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb"
         },
-        
         {
             "name": "C Launch",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}",
-            "args": ["../file02.txt", "output_file.txt"]
+            "args": [
+                "file02.txt",
+                "output_file.txt"
+            ]
         },
         {
             "name": "C/C++: gcc compilare ed eseguire il debug del file attivo",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "miDebuggerArgs": "prova",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["../file02.txt", "output_file.txt"],
+            "args": [
+                "file02.txt",
+                "output_file.txt"
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
@@ -46,7 +54,9 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": [],
+            "args": [
+                "file02.txt",
+                "output_file.txt"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
@@ -59,12 +69,31 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "immettere il nome del programma, ad esempio ${workspaceFolder}/a.out",
-            "args": [],
+            "args": [
+                "file02.txt",
+                "output_file.txt"
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb"
+        },
+        {
+            "name": "C/C++: clang++ compilare ed eseguire il debug del file attivo",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [
+                "file02.txt",
+                "output_file.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "C/C++: clang++ compila il file attivo"
         }
     ],
     "version": "2.0.0"
